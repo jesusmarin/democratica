@@ -1,0 +1,249 @@
+ type Query {
+    "Obtenemos las lista de todos los usuarios"
+    users: [User!]!
+    "Iniciamos sesión en el sistema"
+    login(email: String!, password: String!): ResultToken!
+    "Obtener nuestra información con el token"
+    me: ResultUser!
+    "Buscar usuario por el email"
+    userByEmail(email: String!): User!
+    "Buscar usuario por el ID"
+    userPorId(id: Int!): User!
+}
+
+type Mutation {
+    "Registro de los usuarios en el sistema"
+    registerUser(user: UserInput): ResultUser!
+    "Actualizar el registro de un usuario en el sistema"
+    updateUser(id: ID!, user: UserInput): ResultUser!
+    "agregar datos de usuario"
+    addDatosUsuario(id:Int!, inputDatos: InputDatos): ResultUser!
+     "agregar aplicación al sistema"
+    registerApp(aplicacion:AapInput!):ResultApp
+     "editar datos de aplicación al sistema"
+    upddateApp(name:String!, aplicacion:AapInput!):ResultApp
+}
+type Subscription {
+    changeApp:[Aplicacion!]!
+}
+
+type User {
+    id: ID!
+    name: String!
+    lastname: String!
+    lastname2: String!
+    email: String!
+    password: String
+    registerDate: String!
+    documento: String!
+    tipoDoc: TipoDoc!
+    fechaNacimiento: String
+    estado: Estado
+    tipoUsuario: String!
+    cargo:String
+    foto: String
+    datosUsuario: DatosUsuario
+    aplicacion: String
+}
+
+input UserInput {
+    name: String!
+    lastname: String!
+    lastname2:String
+    email: String!
+    password: String!
+    documento: String!
+    tipoDoc: TipoDoc!
+    fechaNacimiento: String
+    estado: Estado
+    tipoUsuario: String
+    cargo:String
+    foto: String
+    aplicacion: String
+}
+
+type ResultUser {
+    status: Boolean!
+    message: String!
+    user: User
+}
+
+type ResultToken {
+    status: Boolean!
+    message: String!
+    token: String
+}
+
+type Aplicacion{
+    id: ID!
+    institucion: String!
+    semestre:String
+    valor:String
+    secuencia: Int
+    estado: Estado
+}
+input AapInput{
+    id: ID! 
+    institucion: String!
+    semestre:String
+    valor:String
+    secuencia: Int
+    estado: Estado
+    logo:String
+}
+type ResultApp {
+    status: Boolean!
+    message: String!
+    aplicacion: Aplicacion
+}
+
+type  DatosUsuario{
+    id: ID!
+    direccion: String
+    telefono: String
+    profesion: String
+    partidoPolitico: String
+    "Id de la ciudad donde  está"
+    ciudad:Int   
+}
+
+input  InputDatos{
+    id: ID!
+    direccion: String
+    telefono: String
+    profesion: String
+    partidoPolitico: String
+    "Id de la ciudad donde  está"
+    ciudad:Int   
+}
+
+type Pais{
+    id: ID!
+    nombre:String
+    estados:[Departamento]
+}
+type Departamento{
+    id: ID!
+    nombre:String
+    ciudades:[Ciudad]
+}
+type Ciudad{
+    id: ID!
+    nombre:String
+}
+
+type Acta{
+    id: ID!
+    fecha: String
+    hora: String
+    lugar: String
+    presidente: User!
+    secretario: User!
+    numero: String
+    "ACTIVA, CERRADA, FINALIZADA"
+    estado: String 
+    " Ordinaria, Extraordinaria"
+    tipo: String    
+    item:[OrdenDelDia]
+    asistencia: [User]
+}
+
+type OrdenDelDia {
+    id: ID!   
+    numero: String
+    item: String
+    fechaRegistro: String
+    aprobatoria: SINO    
+    habilitado: SINO
+    participacion:[Participacion]
+}
+
+type Participacion {
+    id: ID!
+    participacion: String
+    hora: String
+    voto: VotacionItem
+    "id del usuario que dió el voto"
+    usuario: Int!
+}
+
+type Eleccion {
+    id: ID!
+    eleccion: String
+    fecha: String
+    inicio: String
+    cierre: String
+    lugar: String
+    observacion: String
+    planchas: [Plancha]
+    candidatos:[Candidato]
+}
+
+type Plancha {
+    id: ID!
+    nombre: String
+    numero: Int
+    observacon: String
+    votosPlancha: Int
+    candidatos: [Candidato]
+}
+
+type Candidato {
+    id: ID!
+    cargo: String
+    votosCandidato: Int
+    fechaInscripcion: String
+    "id del usuario candidato"
+    usuario: Int!
+    url: String
+}
+type VotoCandidato {
+    id: ID!
+    fecha: String
+    medio: String
+    "MOBIL, PC, PRESENCIAL"
+    lugar: String
+    "id del user que dá el voto"
+    votante: Int!
+    "id del usuario candidato que recibe el voto"
+    candidato: Int!
+}
+
+type VotoPlancha {
+    id: ID!
+    fecha: String
+    medio: String
+    "MOBIL, PC, PRESENCIAL"
+    lugar: String
+    "id del usuario que dá el voto"
+    votante: Int!
+    "id de la plancha que recibe el voto"
+    plancha: Int!
+}
+
+enum TipoDoc{
+    CC
+    TI
+    RC
+    PAS
+    OTRO
+}
+
+enum Estado {
+    ACTIVO
+    INACTIVO
+}
+
+enum VotacionItem {
+    SI
+    NO
+    BLANCO
+    IMPEDIDO
+    ABSTENCION
+    INHABILITADO
+}
+
+enum SINO{
+    SI
+    NO
+}
