@@ -29,7 +29,7 @@
     "node": "v12.16.1"
   },
   "dependencies": {
-    "apollo-server-express": "^2.13.1",
+    "apollo-server-express": "^2.14.2",
     "bcryptjs": "^2.4.3",
     "chalk": "^2.4.2",
     "compression": "^1.7.4",
